@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+	<title>Document</title>
+</head>
+<style>
+	.list-container {
+		display: flex;
+		column-gap: 50px;
+	}
+
+	.select-athlete {
+		border: 1px solid red;
+	}
+</style>
+
+<body>
+	<div>Задача 6. Пари для танців. Поступово вибираємо хлопця, дівчину і додаємо у обрані пари. Пару можна видалити.
+		Поки не вибрано хлопця і дівчину кнопка «Додати» заблокована. Якщо не вистачає хлопців або дівчат вибір також
+		блокується.
+	</div>
+	<div id="app">
+		<div class="list-container">
+			<div class="athlet-container">
+				<h1>Boys</h1>
+				<div v-for="(boy, index) in boysArray" :key="boy.id">
+					<div :class="{'select-athlete' : boy.isChosen}" @click="onSelectBoy(index)">{{boy.name}}</div>
+				</div>
+			</div>
+			<div class="athlet-container">
+				<h1>Girls</h1>
+				<div v-for="(girl, index) in girlsArray" :key="girl.id">
+					<div :class="{'select-athlete' : girl.isChosen}" @click="onSelectGirl(index)">{{girl.name}}</div>
+				</div>
+			</div>
+		</div>
+		<button @click="createNewPair()" v-show="chooseBoy&&chooseGirl">Add</button>
+
+		<div>
+			<h1>Pairs</h1>
+			<div v-for="(pair, index) in pairArray" :key="pair.id">
+				<div>{{pair.boy}} - {{pair.girl}}</div>
+				<button @click="deletePair(index)">Delete</button>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	const { createApp } = Vue
+	const app = createApp({
+		data() {
+			return {
+				boysArray: [
+					{
+						id: 0,
+						name: 'Sema',
+						isChosen: false
+					},
+					{
+						id: 1,
+						name: 'Dima',
+						isChosen: false
+					},
+					{
+						id: 2,
+						name: 'Vasya',
+						isChosen: false
+					},
+					{
+						id: 3,
+						name: 'Igor',
+						isChosen: false
+					}
+				],
+				girlsArray: [
+					{
+						id: 0,
+						name: 'Natalya',
+						isChosen: false
+					},
+					{
+						id: 1,
+						name: 'Larisa',
+						isChosen: false
+					},
+					{
+						id: 2,
+						name: 'Katya',
+						isChosen: false
+					},
+					{
+						id: 3,
+						name: 'Ira',
+						isChosen: false
+					}
+				],
+				pairArray: [],
+				addButton: false,
+				chooseBoy: false,
+				chooseGirl: false
+			}
+		},
+		computed: {
+
+		},
+		methods: {
+			onSelectBoy(index) {
+				this.boysArray.forEach(boy => {
+					boy.isChosen = false
+				})
+				this.boysArray[index].isChosen = true
+				this.chooseBoy = true
+			},
+			onSelectGirl(index) {
+				this.girlsArray.forEach(girl => {
+					girl.isChosen = false
+				})
+				this.girlsArray[index].isChosen = true
+				this.chooseGirl = true
+			},
+			createNewPair() {
+				this.chooseBoy = false
+				this.chooseGirl = false
+				let selectedBoy = this.boysArray.find(boy => boy.isChosen)
+				let selectedGirl = this.girlsArray.find(girl => girl.isChosen)
+				let newPair = {
+					id: this.pairArray.length + 1,
+					boy: selectedBoy.name,
+					girl: selectedGirl.name,
+					isChosen: false
+				}
+				this.pairArray.push(newPair)
+
+				this.boysArray = this.boysArray.filter(boy => boy.id !== selectedBoy.id)
+				this.girlsArray = this.girlsArray.filter(girl => girl.id !== selectedGirl.id)
+			},
+			deletePair(index) {
+				this.pairArray.splice(index, 1)
+			}
+		}
+	}).mount("#app")
+</script>
+
+</html>

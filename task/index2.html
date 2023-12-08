@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+	<title>Document</title>
+</head>
+
+<body>
+	<div>Задача 8. Дано список автомобілів (марка, рік випуску, ціна). Сформувати елементи для фільтрування з
+		використанням випадаючого списку (контент цих випадаючих списків сформувати у залежності від переданого списку).
+	</div>
+	<div id="app">
+		<div>
+			<h2>Марка</h2>
+			<select v-model="choseBrand">
+				<option v-for="brand in carsBrands" :key="brand" :value="brand">{{brand}}</option>
+			</select>
+		</div>
+		<div>
+			<h2>Рік</h2>
+			<select v-model="choseYear">
+				<option v-for="year in carsYears" :key="year" :value="year">{{year}}</option>
+			</select>
+		</div>
+		<div>
+			<h2>Список</h2>
+			<ul v-if="autoArray.length">
+				<li v-for="(car, index) in filterCar" :key="car.id">
+					{{car.name}} - {{car.year}}р. - {{car.price}}$
+				</li>
+			</ul>
+			<div v-else>Машини такої марки та року немає</div>
+		</div>
+	</div>
+</body>
+<script>
+	const { createApp } = Vue
+	const app = createApp({
+		data() {
+			return {
+				choseBrand: null,
+				choseYear: null,
+				autoArray: [
+					{
+						id: 0,
+						name: 'BMW',
+						year: 2012,
+						price: 25000
+					},
+					{
+						id: 1,
+						name: 'Range Rover',
+						year: 2017,
+						price: 55000
+					},
+					{
+						id: 2,
+						name: 'Mercedes',
+						year: 2020,
+						price: 35000
+					},
+					{
+						id: 3,
+						name: 'Audi',
+						year: 2022,
+						price: 30000
+					},
+					{
+						id: 4,
+						name: 'BMW',
+						year: 2023,
+						price: 50000
+					},
+					{
+						id: 5,
+						name: 'Mercedes',
+						year: 2010,
+						price: 15000
+					},
+					{
+						id: 6,
+						name: 'Range Rover',
+						year: 2010,
+						price: 27000
+					},
+				],
+				carsBrands: ['BMW', 'Range Rover', 'Mercedes', 'Audi'],
+				carsYears: [2010, 2012, 2017, 2020, 2022, 2023]
+			}
+		},
+
+		computed: {
+			filterCar() {
+				console.log(this.autoArray)
+				if (this.choseBrand && this.choseBrand) {
+					return this.autoArray.filter((car) => {
+						return car.name == this.choseBrand && car.year == this.choseYear
+					})
+				} else if (this.choseBrand) {
+					return this.autoArray.filter((car) => {
+						return car.name == this.choseBrand
+					})
+				} else if (this.choseYear) {
+					return this.autoArray.filter((car) => {
+						return car.year == this.choseBrand
+					})
+				} else
+					return this.autoArray
+			},
+			filterCar() {
+				if (this.choseBrand && this.choseYear) {
+					return this.autoArray.filter((car) => {
+						return car.name === this.choseBrand && car.year === parseInt(this.choseYear)
+					});
+				} else if (this.choseBrand) {
+					return this.autoArray.filter((car) => {
+						return car.name === this.choseBrand
+					});
+				} else if (this.choseYear) {
+					return this.autoArray.filter((car) => {
+						return car.year === parseInt(this.choseYear);
+					});
+				} else {
+					return this.carList
+				}
+			}
+		}
+	}).mount('#app')
+</script>
+
+</html>
